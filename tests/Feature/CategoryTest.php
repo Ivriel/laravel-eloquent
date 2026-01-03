@@ -190,15 +190,29 @@ class CategoryTest extends TestCase
         self::assertNotNull($category);
     }
 
+    public function seeder(){
+   $this->seed([CategorySeeder::class, ProductSeeder::class]);
+
+    }
     public function testOneToMany()
     {
-        $this->seed([CategorySeeder::class, ProductSeeder::class]);
-
+     $this->seeder();
         $category = Category::find("FOOD");
         self::assertNotNull($category);
 
         $products = $category->products;
         self::assertNotNull($products);
         self::assertCount(1,$products);
+    }
+
+    public function testRelationshipQuery()
+    {
+        $this->seeder();
+        $category = Category::find("FOOD");
+        $products = $category->products;
+
+        self::assertCount(1,$products);
+        $outOfStockProducts = $category->products()->where('stock','<=',0)->get();
+        self::assertCount(1,$outOfStockProducts);
     }
 }
