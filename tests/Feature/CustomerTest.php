@@ -134,11 +134,14 @@ class CustomerTest extends TestCase
         $products = $customer->likeProductsLastWeek;
 
         foreach ($products as $product) {
-           $pivot = $product->pivot;
+           $pivot = $product->pivot;  // objek model LIKE
            self::assertNotNull($pivot);
            self::assertNotNull($pivot->customer_id);
            self::assertNotNull($pivot->product_id);
            self::assertNotNull($pivot->created_at);
+
+           self::assertNotNull($pivot->customer);
+           self::assertNotNull($pivot->product);
         }
     }
 }
