@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Comment;
+use App\Models\Product;
+use App\Models\Voucher;
 use Illuminate\Database\Seeder;
 
 class CommentSeeder extends Seeder
@@ -12,6 +14,29 @@ class CommentSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        $this->createCommentsForProduct();
+        $this->createCommentsForVoucher();
+    }
+
+    private function createCommentsForProduct()
+    {
+        $product = Product::find('1');
+        $comment = new Comment;
+        $comment->email = 'ivriel@gmail.com';
+        $comment->title = 'Title';
+        $comment->commentable_id = $product->id;
+        $comment->commentable_type = Product::class;
+        $comment->save();
+    }
+
+    private function createCommentsForVoucher(): void
+    {
+        $voucher = Voucher::first();
+        $comment = new Comment;
+        $comment->email = 'ivriel@gmail.com';
+        $comment->title = 'Title';
+        $comment->commentable_id = $voucher->id;
+        $comment->commentable_type = Voucher::class;
+        $comment->save();
     }
 }
