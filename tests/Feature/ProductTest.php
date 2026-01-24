@@ -77,6 +77,18 @@ class ProductTest extends TestCase
             self::assertEquals(Product::class, $comment->commentable_type);
             self::assertEquals($product->id, $comment->commentable_id);
         }
+    }
 
+    public function test_one_of_many_polymorphic()
+    {
+        $this->seed([CategorySeeder::class, ProductSeeder::class, VoucherSeeder::class, CommentSeeder::class]);
+        $product = Product::find('1');
+        self::assertNotNull($product);
+
+        $comment = $product->latestComment;
+        self::assertNotNull($comment);
+
+        $comment = $product->oldestComment;
+        self::assertNotNull($comment);
     }
 }
