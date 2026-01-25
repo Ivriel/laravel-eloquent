@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Address;
 use App\Models\Person;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -39,5 +40,25 @@ class PersonTest extends TestCase
 
         self::assertInstanceOf(Carbon::class,$person->created_at);
         self::assertInstanceOf(Carbon::class,$person->updated_at);
+    }
+
+    public function testCustomCasts()
+    {
+        $person = new Person();
+        $person->first_name = "Ivriel";
+        $person->last_name = "Gunawan";
+        $person->address = new Address("Jl. Mawar","Bandar Lampung","Indonesia","12345");
+        $person->save();
+
+        self::assertNotNull($person->created_at);
+        self::assertNotNull($person->updated_at);
+
+        self::assertInstanceOf(Carbon::class,$person->created_at);
+        self::assertInstanceOf(Carbon::class,$person->updated_at);
+
+        self::assertEquals("Jl. Mawar",$person->address->street);
+        self::assertEquals("Bandar Lampung",$person->address->city);
+        self::assertEquals("Indonesia",$person->address->country);
+        self::assertEquals("12345",$person->address->postal_code);
     }
 }
