@@ -54,7 +54,7 @@ class ProductTest extends TestCase
         self::assertEquals('2', $mostExpensiveProduct->id);
     }
 
-    public function test_one_to_one_polymorphic()
+    public function testOneToManyPolymorphic()
     {
         $this->seed([CustomerSeeder::class, CategorySeeder::class, ProductSeeder::class, ImageSeeder::class]);
 
@@ -76,7 +76,7 @@ class ProductTest extends TestCase
 
         $comments = $product->comments;
         foreach ($comments as $comment) {
-            self::assertEquals(Product::class, $comment->commentable_type);
+            self::assertEquals("product", $comment->commentable_type);
             self::assertEquals($product->id, $comment->commentable_id);
         }
     }
